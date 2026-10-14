@@ -1,0 +1,17 @@
+[THEME]
+bg_color = DEEP_BLUE
+wave_speed = 2
+text_color = WHITE
+
+[BUBBLES]
+count = 2
+
+[BUBBLE_0]
+label = "Empty Slot"
+icon_color = GREY
+launch = "/empty.game"
+
+[BUBBLE_1]
+label = "System Settings"
+icon_color = BLUE
+launch = "/settings.game"

@@ -1,0 +1,88 @@
+[CONFIG]
+title = "Geo Dash CYD"
+width = 320
+height = 240
+fps = 30
+
+[CODE]
+// Player variables
+var px = 50
+var py = 160
+var p_size = 20
+var gravity = 3
+var jump_force = -25
+var velocity_y = 0
+var is_grounded = 1
+
+// Spike (Obstacle) variables
+var sx = 320
+var sy = 160
+var s_size = 20
+var speed = 6
+
+// Game State
+var score = 0
+var is_game_over = 0
+
+on update {
+if is_game_over == 1 then
+// Game Over Screen
+clear(RED)
+text("GAME OVER", 100, 100, WHITE)
+text("Press Jump to Restart", 60, 140, WHITE)
+
+if button_jump then
+// Reset Game
+py = 160
+sx = 320
+score = 0
+is_game_over = 0
+end
+else
+// 1. INPUT & PHYSICS
+// Jump if your Joy-Con jump button is pressed
+if button_jump and is_grounded == 1 then
+velocity_y = jump_force
+is_grounded = 0
+end
+
+// Apply Gravity
+velocity_y = velocity_y + gravity
+py = py + velocity_y
+
+// Floor Collision (Floor is at Y = 160)
+if py >= 160 then
+py = 160
+velocity_y = 0
+is_grounded = 1
+end
+
+// 2. MOVE OBSTACLES
+sx = sx - speed
+// Reset spike when it goes off screen
+if sx < -20 then
+sx = 320
+score = score + 1
+end
+
+// 3. COLLISION DETECTION (Player box vs Spike box)
+if px < sx + s_size and px + p_size > sx and py < sy + s_size and py + p_size > sy then
+is_game_over = 1
+end
+
+// 4. RENDERING EVERYTHING
+clear(BLACK)
+
+// Draw Floor line
+line(0, 180, 320, 180, WHITE)
+
+// Draw Player (Iconic yellow cube)
+rect(px, py, p_size, p_size, YELLOW)
+
+// Draw Spike (Red box/obstacle)
+rect(sx, sy, s_size, s_size, RED)
+
+// Draw UI Score
+text("SCORE: " + score, 10, 10, GREEN)
+end
+}
